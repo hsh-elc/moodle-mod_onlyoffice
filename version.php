@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2020101900;
+$plugin->version = 2021160600;
 $plugin->requires = 2020061502; // Moodle 3.9.2.
 $plugin->component = 'mod_onlyoffice';
 $plugin->maturity = MATURITY_STABLE;

@@ -41,27 +41,36 @@ class backup_onlyoffice_activity_structure_step extends backup_activity_structur
             'displaydescription', 'candownload', 'canprint',
         ]);
 
-        $documents = new backup_nested_element('documents');
-
-        $document = new backup_nested_element('document', ['id'], [
-            'groupid', 'locked', 'documentkey'
-        ]);
+        if ($userinfo) {
+            $documents = new backup_nested_element('documents');
+            $document = new backup_nested_element('document', ['id'], [
+                'groupid', 'locked', 'documentkey',
+            ]);
+        }
 
         // Build the tree.
-        $onlyoffice->add_child($documents);
-        $documents->add_child($document);
+        if ($userinfo) {
+            $onlyoffice->add_child($documents);
+            $documents->add_child($document);
+        }
 
         // Define sources.
         $onlyoffice->set_source_table('onlyoffice', ['id' => backup::VAR_ACTIVITYID]);
-        $document->set_source_table('onlyoffice_document', ['onlyoffice' => backup::VAR_PARENTID]);
+        if ($userinfo) {
+            $document->set_source_table('onlyoffice_document', ['onlyoffice' => backup::VAR_PARENTID]);
+        }
 
         // Define id annotations.
-        $document->annotate_ids('group', 'groupid');
+        if ($userinfo) {
+            $document->annotate_ids('group', 'groupid');
+        }
 
         // Define file annotations.
         $onlyoffice->annotate_files('mod_onlyoffice', 'intro', null);
         $onlyoffice->annotate_files('mod_onlyoffice', \mod_onlyoffice\onlyoffice::FILEAREA_INITIAL, null);
-        $document->annotate_files('mod_onlyoffice', \mod_onlyoffice\onlyoffice::FILEAREA_GROUP, 'groupid');
+        if ($userinfo) {
+            $document->annotate_files('mod_onlyoffice', \mod_onlyoffice\onlyoffice::FILEAREA_GROUP, 'groupid');
+        }
 
         // Return the root element (instance), wrapped into standard activity structure.
         return $this->prepare_activity_structure($onlyoffice);

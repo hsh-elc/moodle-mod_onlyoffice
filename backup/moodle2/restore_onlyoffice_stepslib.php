@@ -65,6 +65,7 @@ class restore_onlyoffice_activity_structure_step extends restore_activity_struct
 
         $data->onlyoffice = $this->get_new_parentid('onlyoffice');
         $data->groupid = $data->groupid ? $this->get_mappingid('group', $data->groupid) : 0;
+        $data->documentkey = \mod_onlyoffice\record\onlyoffice_document::generate_document_key();
 
         $newitemid = $DB->insert_record('onlyoffice_document', $data);
         $this->set_mapping('onlyoffice_document', $oldid, $newitemid);

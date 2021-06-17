@@ -122,7 +122,7 @@ class onlyoffice_document {
         $record = (object)[
             'onlyoffice' => $this->activityrecord->id,
             'groupid' => $this->groupid,
-            'documentkey' => $this->generate_document_key(),
+            'documentkey' => self::generate_document_key(),
             'locked' => onlyoffice::LOCKED_DEFAULT,
         ];
 
@@ -137,7 +137,7 @@ class onlyoffice_document {
      */
     private function update_document_key(string $key = null): void {
         global $DB;
-        $key = $key ?? $this->generate_document_key();
+        $key = $key ?? self::generate_document_key();
         $DB->set_field('onlyoffice_document', 'documentkey', $key, ['id' => $this->documentrecord->id]);
     }
 
@@ -145,9 +145,8 @@ class onlyoffice_document {
      * Generate a document key
      * @return string New document key
      */
-    private function generate_document_key(): string {
-        $key = random_string(self::DOCUMENT_KEY_LENGTH);
-        return $key;
+    public static function generate_document_key(): string {
+        return random_string(self::DOCUMENT_KEY_LENGTH);
     }
 
     /**
